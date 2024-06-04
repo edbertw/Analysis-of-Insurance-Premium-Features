@@ -7,7 +7,7 @@ library(reshape2)
 library(randomForest)
 library(caret)
  
-insurance <- read_csv("Downloads/insurance.csv")
+insurance <- read_csv("insurance.csv")
 print(summary(insurance))
 null_counts <- sapply(insurance, function(x)
   sum(is.na(x)))
