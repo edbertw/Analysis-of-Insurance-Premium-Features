@@ -17,6 +17,82 @@ insurance <- insurance |>
   mutate(children = factor(children)) |>
   mutate(charges = round(charges,2)) |> #convert to 2 d.p. for precision
   mutate(bmi = round(bmi,1))
+                      
+# Create a vector of factor values
+factor_values <- factor(insurance$region)
+
+# Calculate the frequencies of each factor level
+freq_table <- table(factor_values)
+
+# Calculate the percentages
+percentages <- prop.table(freq_table) * 100
+
+# Create labels for the factor levels
+labels_factors <- names(freq_table)
+
+# Create labels for the percentages
+labels_percentages <- paste0(round(percentages, 2), "%")
+
+# Set up the pie chart plot area
+par(mar = c(1, 1, 1, 1))  # Adjust the margins
+
+# Draw the pie chart with labels outside
+pie(freq_table, labels = labels_factors, radius = 0.8, col = rainbow(length(freq_table)))
+
+# Add percentages inside the pie slices
+piepercent <- round(100 * freq_table / sum(freq_table), 1)
+for (i in 1:length(freq_table)) {
+  lbl <- paste(labels_percentages[i], "\n", labels_factors[i])
+  lbl <- paste(lbl, "\n", piepercent[i], "%", sep = "")
+  lblpos <- 2 * pi * cumsum(freq_table)[i] / sum(freq_table)
+  theta <- lblpos * 180 / pi
+  if (theta < 90) {
+    x <- 1.05 *cos(lblpos)
+    y <- 1.05 * sin(lblpos)
+    text(x, y, lbl, cex = 0.8)
+  } else {
+    x <- 1.05 * cos(lblpos)
+    y <- 1.05 * sin(lblpos)
+    text(x, y, lbl, cex = 0.8)
+  }
+}
+
+# Create a vector of factor values
+factor_values <- factor(insurance$region) #sex, smoker, region
+
+# Calculate the frequencies of each factor level
+freq_table <- table(factor_values)
+
+# Calculate the percentages
+percentages <- prop.table(freq_table) * 100
+
+# Create labels for the factor levels
+labels_factors <- names(freq_table)
+
+# Create labels for the percentages
+labels_percentages <- paste0(round(percentages, 2), "%")
+
+# Set up the pie chart plot area
+par(mar = c(1, 1, 1, 1))  # Adjust the margins
+
+# Draw the pie chart with labels outside
+pie(freq_table, labels = labels_factors, radius = 0.8, col = rainbow(length(freq_table)))
+
+# Add percentages inside the pie slices
+for (i in 1:length(freq_table)) {
+  lbl <- paste(labels_percentages[i], "\n", labels_factors[i])
+  lblpos <- 2 * pi * cumsum(freq_table)[i] / sum(freq_table)
+  theta <- lblpos * 180 / pi
+  if (theta < 90) {
+    x <- 1.00 *cos(lblpos)
+    y <- 1.00 * sin(lblpos)
+    text(x, y, lbl, cex = 0.65)
+  } else {
+    x <- 1.00 * cos(lblpos)
+    y <- 1.00 * sin(lblpos)
+    text(x, y, lbl, cex = 0.65)
+  }
+}
 
 premiumvsgender<-insurance |> 
   group_by(sex) |>
