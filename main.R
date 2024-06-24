@@ -13,6 +13,7 @@ null_counts <- sapply(insurance, function(x)
   sum(is.na(x)))
 table <- data.frame(NoOfNull = null_counts)
 print(table)
+                      
 insurance <- insurance |>
   mutate(children = factor(children)) |>
   mutate(charges = round(charges,2)) |> #convert to 2 d.p. for precision
@@ -136,6 +137,7 @@ premiumvschildren<-insurance |>
   theme(axis.text.y = element_text(angle = 0,hjust =1))
 
 print(grid.arrange(premiumvsgender,premiumvssmoker,premiumvsregion,premiumvschildren,ncol=2,nrow=2))
+                      
 #we see that most number of smokers are in southeast in respect to other areas.
 smokerbyregions <- insurance |>
   ggplot(aes(region,fill = smoker)) +
@@ -160,6 +162,7 @@ premiumvsbmi <- insurance |>
   theme_stata() +
   theme(axis.text.y = element_text(angle = 0,hjust =1)) +
   theme(legend.text = element_text(size = 6),legend.title = element_text(size=10))
+                      
 #bmi vs charges positive correlation IF the person is a smoker
 print(grid.arrange(premiumvsage,premiumvsbmi,nrow=1,ncol=2))
 
@@ -175,11 +178,13 @@ insurance <- insurance |>
          )) |>
   mutate_at(c("sex","children","smoker","region"),as.numeric)
 print(head(insurance))
+                      
 #building correlation matrix & heatmap
 corr_matrix <- round(cor(insurance),2)
 print(head(corr_matrix))
 melted_corr_matrix <- melt(corr_matrix)
 print(head(melted_corr_matrix))
+                      
 heatmap <- melted_corr_matrix |>
   ggplot(aes(Var1,Var2,fill=value)) +
   geom_tile() +
@@ -196,6 +201,7 @@ print(heatmap)
 #outputs mean of squared residuals which is basically MAE (Error term)
 #also outputs %Var explained which is basically the model's ability to detect more complex features
 #more number of trees will cause higher accuracy but more fitting runtime.
+                      
 set.seed(42) 
 rf_model <- randomForest(formula = insurance$charges ~ . , data = insurance, ntree=1250,mtry = 3,
                          keep.forest= FALSE, importance = TRUE )
@@ -214,6 +220,7 @@ predictedvsactual <- predicted_insurance |>
   ylab("Prediction Premium") +
   ggtitle("Random Forest Regression") +
   theme(axis.text.y = element_text(angle = 0,hjust =1))
+                      
 print(predictedvsactual)
 model <- lm(predicted_insurance$prediction~predicted_insurance$charges)
 print(summary(model)) #85.3% accuracy and 0.853 r-squared value.
@@ -224,6 +231,7 @@ importance <- importance |>
   mutate(Overall = round(Overall,2)) |>
   arrange(desc(Overall)) |>
   rename(Importance_Score = Overall)
+                      
 print(importance)
 #what is the most important ?
 print(importance |> 
